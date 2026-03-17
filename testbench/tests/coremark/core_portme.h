@@ -19,6 +19,8 @@ Original Author: Shay Gal-on
         This file contains configuration constants required to execute on
    different platforms
 */
+// wyj
+#include <stddef.h> 
 #ifndef CORE_PORTME_H
 #define CORE_PORTME_H
 /************************/

@@ -659,10 +659,18 @@ ee_vsprintf(char *buf, const char *fmt, va_list args)
     return str - buf;
 }
 
+// wyj
+extern int putchar(int c);
+
 void
 uart_send_char(char c)
 {
+// wyj
+/*
 #error "You must implement the method uart_send_char to use this file!\n";
+*/
+    putchar((unsigned char)c);
+
     /*	Output of a char to a UART usually follows the following model:
             Wait until UART is ready
             Write char to UART

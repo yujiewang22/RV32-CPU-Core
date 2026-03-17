@@ -41,11 +41,22 @@ volatile ee_s32 seed5_volatile = 0;
    cpu clock cycles performance counter etc. Sample implementation for standard
    time.h and windows.h definitions included.
 */
+// wyj
+/*
 CORETIMETYPE
 barebones_clock()
 {
 #error \
     "You must implement a method to measure time in barebones_clock()! This function should return current time.\n"
+}
+*/
+#include <stdint.h>
+uint64_t get_mcycle();
+
+CORETIMETYPE
+barebones_clock()
+{
+    return get_mcycle();
 }
 /* Define : TIMER_RES_DIVIDER
         Divider to trade off timer resolution and total time that can be
@@ -59,7 +70,10 @@ barebones_clock()
 #define MYTIMEDIFF(fin, ini)       ((fin) - (ini))
 #define TIMER_RES_DIVIDER          1
 #define SAMPLE_TIME_IMPLEMENTATION 1
+// wyj
+#ifndef EE_TICKS_PER_SEC
 #define EE_TICKS_PER_SEC           (CLOCKS_PER_SEC / TIMER_RES_DIVIDER)
+#endif
 
 /** Define Host specific (POSIX), or target specific global time variables. */
 static CORETIMETYPE start_time_val, stop_time_val;
@@ -129,8 +143,11 @@ ee_u32 default_num_contexts = 1;
 void
 portable_init(core_portable *p, int *argc, char *argv[])
 {
+// wyj
+/*
 #error \
     "Call board initialization routines in portable init (if needed), in particular initialize UART!\n"
+*/
 
     (void)argc; // prevent unused warning
     (void)argv; // prevent unused warning
