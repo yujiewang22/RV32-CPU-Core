@@ -378,9 +378,9 @@ for (i = 0; i < MULTITHREAD; i++)
                       / time_in_secs(total_time));
         ee_u32 cpu_mhz = EE_TICKS_PER_SEC / 1000000;
         ee_u32 iter_per_mhz_scaled = iterations_per_sec_scaled / cpu_mhz;
-        ee_printf("Iterations/Sec: %u.%03u\n", iterations_per_sec_scaled / SCALE, iterations_per_sec_scaled % SCALE);
-        ee_printf("Iterations/MHz: %u.%03u\n", iter_per_mhz_scaled / SCALE, iter_per_mhz_scaled % SCALE);
-        }
+        // ee_printf("Iterations/Sec   : %u.%03u\n", iterations_per_sec_scaled / SCALE, iterations_per_sec_scaled % SCALE);
+        ee_printf("Iterations/MHz   : %u.%03u\n", iter_per_mhz_scaled / SCALE, iter_per_mhz_scaled % SCALE);
+        }          
 #endif
     if (time_in_secs(total_time) < 10)
     {
