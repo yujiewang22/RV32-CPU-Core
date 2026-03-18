@@ -325,12 +325,15 @@ main ()
     printf ("%d.%02d", 1000000*Number_Of_Runs/User_Time,(100000000*Number_Of_Runs/User_Time) % 100);
     */
     uint64_t tmp1 = (uint64_t)1000000 * Number_Of_Runs;
-    uint64_t tmp2 = (uint64_t)100000000 * Number_Of_Runs;
-    uint32_t int_part = (uint32_t)(tmp1 / User_Time);
-    uint32_t frac_part = (uint32_t)((tmp2 / User_Time) % 100);
-    printf ("Run time = %d clocks for %d Dhrystones\n", User_Time, Number_Of_Runs );
-    printf ("Dhrystones per Second per MHz: ");
-    printf ("%d.%02d\n", int_part, frac_part);
+    uint64_t tmp2 = (uint64_t)1000000000 * Number_Of_Runs;
+    uint32_t int_part_0   = (uint32_t)( tmp1 / User_Time       );
+    uint32_t frac_part_0  = (uint32_t)((tmp2 / User_Time       ) % 1000);
+    uint32_t int_part_1   = (uint32_t)( tmp1 / User_Time / 1757);
+    uint32_t frac_part_1  = (uint32_t)((tmp2 / User_Time / 1757) % 1000);
+    printf ("Run clocks       : %d\n"     , User_Time              );
+    printf ("Number_Of_Runs   : %d\n"     , Number_Of_Runs         );
+    printf ("Dhrystones/s/MHz : %d.%03d\n", int_part_0, frac_part_0);
+    printf ("DMIPS/MHz        : %d.%03d\n", int_part_1, frac_part_1);
 #else
 
 #ifdef TIME
