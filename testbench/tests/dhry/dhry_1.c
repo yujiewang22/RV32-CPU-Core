@@ -155,7 +155,12 @@ main ()
   printf ("\n");
   #else
   // We do not have scanf.  Hardwire number of runs.
-  Number_Of_Runs = 1000;
+  // wyj
+  // Number_Of_Runs = 1000;
+  #ifndef NUMBER_OF_RUNS
+  #define NUMBER_OF_RUNS 1000
+  #endif
+  Number_Of_Runs = NUMBER_OF_RUNS;
   #endif
 
   printf ("Execution starts, %d runs through Dhrystone\n", Number_Of_Runs);
@@ -312,9 +317,19 @@ main ()
   else
   {
 #ifdef VEER
+    // wyj
+    /*
     printf ("Run time = %d clocks for %d Dhrystones\n", User_Time, Number_Of_Runs );
     printf ("Dhrystones per Second per MHz: ");
     printf ("%d.%02d", 1000000*Number_Of_Runs/User_Time,(100000000*Number_Of_Runs/User_Time) % 100);
+    */
+    uint64_t tmp1 = (uint64_t)1000000 * Number_Of_Runs;
+    uint64_t tmp2 = (uint64_t)100000000 * Number_Of_Runs;
+    uint32_t int_part = (uint32_t)(tmp1 / User_Time);
+    uint32_t frac_part = (uint32_t)((tmp2 / User_Time) % 100);
+    printf ("Run time = %d clocks for %d Dhrystones\n", User_Time, Number_Of_Runs );
+    printf ("Dhrystones per Second per MHz: ");
+    printf ("%d.%02d\n", int_part, frac_part);
 #else
 #ifdef TIME
     Microseconds = (float) User_Time * Mic_secs_Per_Second
