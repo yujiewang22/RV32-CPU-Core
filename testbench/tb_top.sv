@@ -96,7 +96,9 @@ module tb_top;
     logic                       mpc_debug_run_ack;
     logic                       debug_brkpt_status;
 
-    bit        [31:0]           cycleCnt;
+    // wyj
+    // bit        [31:0]           cycleCnt;
+    bit        [63:0]           cycleCnt;
     logic                       mailbox_data_val;
 
     wire                        dma_hready_out;
@@ -322,7 +324,7 @@ module tb_top;
 
     // wyj 
     // parameter MAX_CYCLES = 10_000_000;
-    parameter MAX_CYCLES = 1_000_000_000;
+    parameter MAX_CYCLES = 64'd100_000_000_000_000;
 
     integer fd, tp, el;
 
@@ -366,7 +368,9 @@ module tb_top;
            for (int i=0; i<2; i++)
                if (trace_rv_i_valid_ip[i]==1) begin
                    commit_count++;
-                   $fwrite (el, "%10d : %8s %0d %h %h%13s ; %s\n",cycleCnt, $sformatf("#%0d",commit_count), 0,
+                   // wyj 
+                   // $fwrite (el, "%10d : %8s %0d %h %h%13s ; %s\n",cycleCnt, $sformatf("#%0d",commit_count), 0,
+                   $fwrite (el, "%15d : %15s %0d %h %h%13s ; %s\n",cycleCnt, $sformatf("#%0d",commit_count), 0,
                            trace_rv_i_address_ip[31+i*32 -:32], trace_rv_i_insn_ip[31+i*32-:32],
                            (wb_dest[i] !=0 && wb_valid[i]) ?  $sformatf("%s=%h", abi_reg[wb_dest[i]], wb_data[i]) : "             ",
                            dasm(trace_rv_i_insn_ip[31+i*32 -:32], trace_rv_i_address_ip[31+i*32-:32], wb_dest[i] & {5{wb_valid[i]}}, wb_data[i])
@@ -374,7 +378,9 @@ module tb_top;
                end
         end
         if(`DEC.dec_nonblock_load_wen) begin
-            $fwrite (el, "%10d : %10d%22s=%h ; nbL\n", cycleCnt, 0, abi_reg[`DEC.dec_nonblock_load_waddr], `DEC.lsu_nonblock_load_data);
+            // wyj 
+            // $fwrite (el, "%10d : %10d%22s=%h ; nbL\n", cycleCnt, 0, abi_reg[`DEC.dec_nonblock_load_waddr], `DEC.lsu_nonblock_load_data);
+            $fwrite (el, "%15d : %10d%22s=%h ; nbL\n", cycleCnt, 0, abi_reg[`DEC.dec_nonblock_load_waddr], `DEC.lsu_nonblock_load_data);
             tb_top.gpr[0][`DEC.dec_nonblock_load_waddr] = `DEC.lsu_nonblock_load_data;
         end
     end
@@ -425,8 +431,13 @@ module tb_top;
         $readmemh("program.hex",  imem.mem);
         tp = $fopen("trace_port.csv","w");
         el = $fopen("exec.log","w");
+        // wyj
+        /*
         $fwrite (el, "//   Cycle : #inst  hart   pc    opcode    reg=value   ; mnemonic\n");
         $fwrite (el, "//---------------------------------------------------------------\n");
+        */
+        $fwrite (el, "//        Cycle :      #inst    hart   pc     opcode    reg=value  ; mnemonic\n");
+        $fwrite (el, "//-------------------------------------------------------------------------------------------------\n");
         fd = $fopen("console.log","w");
         commit_count = 0;
         preload_dccm();
