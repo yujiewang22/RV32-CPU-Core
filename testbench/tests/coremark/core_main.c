@@ -124,7 +124,8 @@ main(int argc, char *argv[])
     ee_u8 stack_memblock[TOTAL_DATA_SIZE * MULTITHREAD];
 #endif
     /* first call any initializations needed */
-    portable_init(&(results[0].port), &argc, argv);
+    // wyj
+    // portable_init(&(results[0].port), &argc, argv);
     /* First some checks to make sure benchmark will run ok */
     if (sizeof(struct list_head_s) > 128)
     {
@@ -365,29 +366,23 @@ for (i = 0; i < MULTITHREAD; i++)
                       / time_in_secs(total_time));
 #else
     ee_printf("Total time (secs): %d\n", time_in_secs(total_time));
+    // wyj
+    /*
     if (time_in_secs(total_time) > 0)
-        // wyj
-        /*
         ee_printf("Iterations/Sec   : %d\n",
                   default_num_contexts * results[0].iterations
                       / time_in_secs(total_time));
-        */
-        {
-        ee_u32 iterations_per_sec_scaled = (
-                  default_num_contexts * results[0].iterations * SCALE
-                      / time_in_secs(total_time));
-        ee_u32 cpu_mhz = EE_TICKS_PER_SEC / 1000000;
-        ee_u32 iter_per_mhz_scaled = iterations_per_sec_scaled / cpu_mhz;
-        // ee_printf("Iterations/Sec   : %u.%03u\n", iterations_per_sec_scaled / SCALE, iterations_per_sec_scaled % SCALE);
-        ee_printf("Iterations/MHz   : %u.%03u\n", iter_per_mhz_scaled / SCALE, iter_per_mhz_scaled % SCALE);
-        }          
+    */  
 #endif
+    // wyj
+    /*
     if (time_in_secs(total_time) < 10)
     {
         ee_printf(
             "ERROR! Must execute for at least 10 secs for a valid result!\n");
         total_errors++;
     }
+    */
 
     ee_printf("Iterations       : %lu\n",
               (long unsigned)default_num_contexts * results[0].iterations);
@@ -443,12 +438,16 @@ for (i = 0; i < MULTITHREAD; i++)
             "Cannot validate operation for these seed values, please compare "
             "with results on a known platform.\n");
 
+// wyj
+/*
 #if (MEM_METHOD == MEM_MALLOC)
     for (i = 0; i < MULTITHREAD; i++)
         portable_free(results[i].memblock[0]);
 #endif
+*/
     /* And last call any target specific code for finalizing */
-    portable_fini(&(results[0].port));
+    // wyj
+    // portable_fini(&(results[0].port));
 
     return MAIN_RETURN_VAL;
 }
