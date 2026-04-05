@@ -105,4 +105,4 @@ cd ${RV_ROOT}/design/dec
 ${RV_ROOT}/tools/coredecode -in decode -legal > legal.e
 espresso -Dso -oeqntott legal.e |  ${RV_ROOT}/tools/addassign -pre out. > legal_equation
 ```
-将生成的equations和legal_equation内的assign语句，复制到dec_decode_ctl.sv内译码器中，即完成译码逻辑简化
+将生成的equations和legal_equation内的assign语句，复制到dec_decode_ctl.sv内译码器中，即完成逻辑简化
