@@ -46,7 +46,7 @@ sudo make install
 git clone https://github.com/classabbyamp/espresso-logic.git
 ```
 #### 1.3.2 编译
-该过程需自动添加可执行文件至本地bin目录
+该过程需手动添加可执行文件至本地bin目录
 ```
 cd espresso-logic/espresso-src
 make
@@ -105,3 +105,4 @@ cd ${RV_ROOT}/design/dec
 ${RV_ROOT}/tools/coredecode -in decode -legal > legal.e
 espresso -Dso -oeqntott legal.e |  ${RV_ROOT}/tools/addassign -pre out. > legal_equation
 ```
+将生成的equations和legal_equation内的assign语句，复制到dec_decode_ctl.sv内译码器中，即完成译码逻辑简化
