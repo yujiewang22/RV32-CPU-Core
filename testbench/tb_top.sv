@@ -328,6 +328,30 @@ module tb_top;
 
     integer fd, tp, el;
 
+// wyj
+// `define ENABLE_PERF_MON 1
+`ifdef ENABLE_PERF_MON 
+// `define PERF_MON_NOEVENT_CLK_ACTIVE
+// `define PERF_MON_ICACHE
+// `define PERF_MON_INST_COMMIT
+// `define PERF_MON_INST_ALIGNED_DECODED
+// `define PERF_MON_INST_LOAD_STORE
+// `define PERF_MON_INST_CALC
+// `define PERF_MON_INST_CSR
+// `define PERF_MON_INST_EBREAK_ECALL_MRET
+// `define PERF_MON_INST_FENCE
+// `define PERF_MON_BRANCH
+// `define PERF_MON_FRONTEND_STALL
+// `define PERF_MON_SYNC_STALL
+// `define PERF_MON_LSU_DMA_STALL
+// `define PERF_MON_EXC_INT
+// `define PERF_MON_FLUSH_LOWER
+// `define PERF_MON_BR_ERROR
+// `define PERF_MON_BUS_TRANS
+// `define PERF_MON_BUS_ERROR_STALL
+// `define PERF_MON_INT_DISABLED_STALLED
+`endif
+
     always @(negedge core_clk) begin
         cycleCnt <= cycleCnt+1;
         // Test timeout monitor
@@ -342,6 +366,82 @@ module tb_top;
         end
         // End Of test monitor
         if(mailbox_write && WriteData[7:0] == 8'hff) begin
+// wyj
+`ifdef ENABLE_PERF_MON
+            $display("************************ Performance Monitor ************************");
+`ifdef PERF_MON_NOEVENT_CLK_ACTIVE
+            $display("NOEVENT         = %0d", `DEC.tlu.mhpmc3); // `define MHPME_NOEVENT         6'd0
+            $display("CLK_ACTIVE      = %0d", `DEC.tlu.mhpmc4); // `define MHPME_CLK_ACTIVE      6'd1 
+`elsif PERF_MON_ICACHE
+            $display("ICACHE_HIT      = %0d", `DEC.tlu.mhpmc3); // `define MHPME_ICACHE_HIT      6'd2 
+            $display("ICACHE_MISS     = %0d", `DEC.tlu.mhpmc4); // `define MHPME_ICACHE_MISS     6'd3 
+`elsif PERF_MON_INST_COMMIT
+            $display("INST_COMMIT     = %0d", `DEC.tlu.mhpmc3); // `define MHPME_INST_COMMIT     6'd4
+            $display("INST_COMMIT_16B = %0d", `DEC.tlu.mhpmc4); // `define MHPME_INST_COMMIT_16B 6'd5
+            $display("INST_COMMIT_32B = %0d", `DEC.tlu.mhpmc5); // `define MHPME_INST_COMMIT_32B 6'd6
+`elsif PERF_MON_INST_ALIGNED_DECODED
+            $display("INST_ALIGNED    = %0d", `DEC.tlu.mhpmc3); // `define MHPME_INST_ALIGNED    6'd7 
+            $display("INST_DECODED    = %0d", `DEC.tlu.mhpmc4); // `define MHPME_INST_DECODED    6'd8 
+`elsif PERF_MON_INST_LOAD_STORE
+            $display("INST_LOAD       = %0d", `DEC.tlu.mhpmc3); // `define MHPME_INST_LOAD       6'd11
+            $display("INST_STORE      = %0d", `DEC.tlu.mhpmc4); // `define MHPME_INST_STORE      6'd12
+            $display("INST_MALOAD     = %0d", `DEC.tlu.mhpmc5); // `define MHPME_INST_MALOAD     6'd13
+            $display("INST_MASTORE    = %0d", `DEC.tlu.mhpmc6); // `define MHPME_INST_MASTORE    6'd14
+`elsif PERF_MON_INST_CALC
+            $display("INST_ALU        = %0d", `DEC.tlu.mhpmc3); // `define MHPME_INST_ALU        6'd15
+            $display("INST_MUL        = %0d", `DEC.tlu.mhpmc4); // `define MHPME_INST_MUL        6'd9
+            $display("INST_DIV        = %0d", `DEC.tlu.mhpmc5); // `define MHPME_INST_DIV        6'd10
+`elsif PERF_MON_INST_CSR
+            $display("INST_CSRREAD    = %0d", `DEC.tlu.mhpmc3); // `define MHPME_INST_CSRREAD    6'd16
+            $display("INST_CSRRW      = %0d", `DEC.tlu.mhpmc4); // `define MHPME_INST_CSRRW      6'd17
+            $display("INST_CSRWRITE   = %0d", `DEC.tlu.mhpmc5); // `define MHPME_INST_CSRWRITE   6'd18
+`elsif PERF_MON_INST_EBREAK_ECALL_MRET
+            $display("INST_EBREAK     = %0d", `DEC.tlu.mhpmc3); // `define MHPME_INST_EBREAK     6'd19
+            $display("INST_ECALL      = %0d", `DEC.tlu.mhpmc4); // `define MHPME_INST_ECALL      6'd20
+            $display("INST_MRET       = %0d", `DEC.tlu.mhpmc5); // `define MHPME_INST_MRET       6'd23
+`elsif PERF_MON_INST_FENCE
+            $display("INST_FENCE      = %0d", `DEC.tlu.mhpmc3); // `define MHPME_INST_FENCE      6'd21
+            $display("INST_FENCEI     = %0d", `DEC.tlu.mhpmc4); // `define MHPME_INST_FENCEI     6'd22
+`elsif PERF_MON_BRANCH
+            $display("INST_BRANCH     = %0d", `DEC.tlu.mhpmc3); // `define MHPME_INST_BRANCH     6'd24
+            $display("BRANCH_MP       = %0d", `DEC.tlu.mhpmc4); // `define MHPME_BRANCH_MP       6'd25
+            $display("BRANCH_TAKEN    = %0d", `DEC.tlu.mhpmc5); // `define MHPME_BRANCH_TAKEN    6'd26
+            $display("BRANCH_NOTP     = %0d", `DEC.tlu.mhpmc6); // `define MHPME_BRANCH_NOTP     6'd27
+`elsif PERF_MON_FRONTEND_STALL
+            $display("FETCH_STALL     = %0d", `DEC.tlu.mhpmc3); // `define MHPME_FETCH_STALL     6'd28 
+            $display("ALGNR_STALL     = %0d", `DEC.tlu.mhpmc4); // `define MHPME_ALGNR_STALL     6'd29 
+            $display("DECODE_STALL    = %0d", `DEC.tlu.mhpmc5); // `define MHPME_DECODE_STALL    6'd30 
+`elsif PERF_MON_SYNC_STALL
+            $display("POSTSYNC_STALL  = %0d", `DEC.tlu.mhpmc3); // `define MHPME_POSTSYNC_STALL  6'd31 
+            $display("PRESYNC_STALL   = %0d", `DEC.tlu.mhpmc4); // `define MHPME_PRESYNC_STALL   6'd32 
+`elsif PERF_MON_LSU_DMA_STALL
+            $display("LSU_FREEZE      = %0d", `DEC.tlu.mhpmc3); // `define MHPME_LSU_FREEZE      6'd33 
+            $display("LSU_SB_WB_STALL = %0d", `DEC.tlu.mhpmc4); // `define MHPME_LSU_SB_WB_STALL 6'd34 
+            $display("DMA_DCCM_STALL  = %0d", `DEC.tlu.mhpmc5); // `define MHPME_DMA_DCCM_STALL  6'd35 
+            $display("DMA_ICCM_STALL  = %0d", `DEC.tlu.mhpmc6); // `define MHPME_DMA_ICCM_STALL  6'd36 
+`elsif PERF_MON_EXC_INT
+            $display("EXC_TAKEN       = %0d", `DEC.tlu.mhpmc3); // `define MHPME_EXC_TAKEN       6'd37
+            $display("TIMER_INT_TAKEN = %0d", `DEC.tlu.mhpmc4); // `define MHPME_TIMER_INT_TAKEN 6'd38
+            $display("EXT_INT_TAKEN   = %0d", `DEC.tlu.mhpmc5); // `define MHPME_EXT_INT_TAKEN   6'd39
+`elsif PERF_MON_FLUSH_LOWER
+            $display("FLUSH_LOWER     = %0d", `DEC.tlu.mhpmc3); // `define MHPME_FLUSH_LOWER     6'd40
+`elsif PERF_MON_BR_ERROR
+            $display("BR_ERROR        = %0d", `DEC.tlu.mhpmc3); // `define MHPME_BR_ERROR        6'd41
+`elsif PERF_MON_BUS_TRANS
+            $display("IBUS_TRANS      = %0d", `DEC.tlu.mhpmc3); // `define MHPME_IBUS_TRANS      6'd42 
+            $display("DBUS_TRANS      = %0d", `DEC.tlu.mhpmc4); // `define MHPME_DBUS_TRANS      6'd43 
+            $display("DBUS_MA_TRANS   = %0d", `DEC.tlu.mhpmc5); // `define MHPME_DBUS_MA_TRANS   6'd44 
+`elsif PERF_MON_BUS_ERROR_STALL
+            $display("IBUS_ERROR      = %0d", `DEC.tlu.mhpmc3); // `define MHPME_IBUS_ERROR      6'd45 
+            $display("DBUS_ERROR      = %0d", `DEC.tlu.mhpmc4); // `define MHPME_DBUS_ERROR      6'd46 
+            $display("IBUS_STALL      = %0d", `DEC.tlu.mhpmc5); // `define MHPME_IBUS_STALL      6'd47 
+            $display("DBUS_STALL      = %0d", `DEC.tlu.mhpmc6); // `define MHPME_DBUS_STALL      6'd48 
+`elsif PERF_MON_INT_DISABLED_STALLED
+            $display("INT_DISABLED    = %0d", `DEC.tlu.mhpmc3); // `define MHPME_INT_DISABLED    6'd49 
+            $display("INT_STALLED     = %0d", `DEC.tlu.mhpmc4); // `define MHPME_INT_STALLED     6'd50 
+`endif
+            $display("*********************************************************************");
+`endif 
             $display("\nFinished : minstret = %0d, mcycle = %0d", `DEC.tlu.minstretl[31:0],`DEC.tlu.mcyclel[31:0]);
             $display("See \"exec.log\" for execution trace with register updates..\n");
             $display("TEST_PASSED");
